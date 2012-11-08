@@ -1,0 +1,17 @@
+{
+	"title": "My awesome playlist",
+	"author": "slicer@work",
+	"timestamp": "1351876260",
+	"playlist": [
+		{
+			"title": "My first track",
+			"type": "youtube",
+			"id": "wX1x7t9wOyA"
+		}, {
+			"title": "My second track",
+			"type": "youtube",
+			"id": "wbHtbNCFego"
+		}
+	],
+	"html": "<li class=\"tile soundcloud-tile on\"><a href=\"\" class=\"tile-image\"><img width=\"160\" height=\"160\" src=\"/test-resources/placeholders/no-image.png\"></a><div class=\"tile-title-1\"><a href=\"\">Track name here</a></div><div class=\"tile-title-2\">by <a href=\"\">Artist name here</a></div><div class=\"tile-title-3\">Soundcloud</div><b></b></li><li class=\"tile soundcloud-tile\"><a href=\"\" class=\"tile-image\"><img width=\"160\" height=\"160\" src=\"/test-resources/placeholders/no-image.png\"></a><div class=\"tile-title-1\"><a href=\"\">Track name here</a></div><div class=\"tile-title-2\">by <a href=\"\">Artist name here</a></div><div class=\"tile-title-3\">Soundcloud</div><b></b></li>"
+}
