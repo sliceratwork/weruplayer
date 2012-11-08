@@ -84,7 +84,7 @@
 				<!--/jplayer-->
 				
 				<!--youtube player-->
-				<iframe id="youtube-player" type="text/html" src="http://www.youtube.com/embed/?enablejsapi=1&origin=http://weruplayer.com" class="player" width="445" height="274" frameborder="0" allowtransparency="yes" scrolling="no" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+				<iframe id="youtube-player" type="text/html" src="http://www.youtube.com/embed/?enablejsapi=1&origin=http://weruplayer.com&wmode=transparent" class="player" width="445" height="274" frameborder="0" allowtransparency="yes" scrolling="no" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
 				<!--youtube player-->
 				
 				<!--vimeo player-->
@@ -100,29 +100,16 @@
 		<!--/playlist wrap-->
 		
 		<!--Scripts-->
-		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="scripts/json2.js" charset="utf-8"></script>
-		<script type="text/javascript" src="//www.youtube.com/iframe_api" charset="utf-8"></script>
-		<script type="text/javascript" src="http://a.vimeocdn.com/js/froogaloop2.min.js" charset="utf-8"></script>
-		<script type="text/javascript" src="http://w.soundcloud.com/player/api.js" charset="utf-8"></script>
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="scripts/utils.js" charset="utf-8"></script>
+		<script type="text/javascript" src="scripts/froogaloop2.min.js" charset="utf-8"></script>
+		<script type="text/javascript" src="scripts/api.js" charset="utf-8"></script>
 		<script type="text/javascript" src="scripts/jplayer.js" charset="utf-8"></script>
 		<script type="text/javascript" src="scripts/jquery.bxSlider.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="scripts/jquery-ajax-localstorage-cache.js" charset="utf-8"></script>
 		<script type="text/javascript" src="scripts/jquery.chosen.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="scripts/jquery.qtip.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="scripts/player.js" charset="utf-8"></script>
-		<script type="text/javascript">
-			
-			
-			(function($){
-				$('#weru-players').WeruPlayer({
-					'onReady': function(){
-						window.console.log(this);
-					},'hello': function(){
-						
-					}
-				});
-			})(jQuery);
-		</script>
 	</body>
 </html>

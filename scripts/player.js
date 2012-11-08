@@ -1,5 +1,11 @@
+// This code loads the YouTube IFrame Player API code asynchronously.
+var tag = document.createElement('script');
+tag.src = "http://www.youtube.com/player_api";
+var YTScriptTag = document.getElementsByTagName('script')[0];
+YTScriptTag.parentNode.insertBefore(tag, YTScriptTag);
+
 //make the player a global variable
-var carousel;
+var WeruPlayer, carousel;
 
 (function($) {
 	jQuery.fn.WeruPlayer = function(options) {
@@ -37,11 +43,71 @@ var carousel;
 		//play
 		self.play = function() {
 			hidePlayButton();
+
+			switch(player) {
+				//soundcloud
+				case 'soundcloud':
+					setTimeout(function() {
+						playerSoundCloud.play();
+					}, 500);
+					break;
+
+				//vimeo
+				case 'vimeo':
+					setTimeout(function() {
+						playerVimeo.api('play');
+					}, 500);
+					break;
+
+				//youtube
+				case 'youtube':
+					playerYouTube.playVideo();
+					break;
+
+				//audio
+				case 'audio':
+					playerAudio.jPlayer('play');
+					break;
+
+				//everything else
+				default:
+					self.stop();
+					playIndex++;
+					self.playNext();
+					break;
+			}
+
+			settings.onPlay();
 		},
 
 		//pause
 		self.pause = function() {
 			showPlayButton();
+
+			switch(player) {
+				//soundcloud
+				case 'soundcloud':
+					playerSoundCloud.pause();
+					break;
+
+				//vimeo
+				case 'vimeo':
+					playerVimeo.api('pause');
+					break;
+
+				//youtube
+				case 'youtube':
+					playerYouTube.pauseVideo();
+					break;
+
+				//audio
+				case 'audio':
+					playerAudio.jPlayer('pause');
+					break;
+			}
+
+			//callback function
+			settings.onPause();
 		},
 
 		//stop
@@ -113,10 +179,11 @@ var carousel;
 		//set media
 		self.setMedia = function(playIndex) {
 			var media = playlist[playIndex];
+			player = media.type;
 
 			highlight(playIndex);
 
-			switch(media.type) {
+			switch(player) {
 				//youtube
 				case 'youtube':
 					//check to see if we have already loaded the media
@@ -220,7 +287,7 @@ var carousel;
 		var playlist = [], players = $('#weru-players'), reposInt = null, ready = 0,
 
 		//players
-		playerAudio, frameVimeo, playerVimeo, frameSoundCloud, playerSoundCloud, playerYouTube, currentYouTube, currentVimeo, currentSC, currentAudio, widgetURL = 'http://api.soundcloud.com/users/1539950/favorites', currentItem = -1;
+		player, playerAudio, frameVimeo, playerVimeo, frameSoundCloud, playerSoundCloud, playerYouTube, currentYouTube, currentVimeo, currentSC, currentAudio, widgetURL = 'http://api.soundcloud.com/users/1539950/favorites', currentItem = -1, watchYT = null;
 
 		//#########################################
 		//youtube
@@ -572,5 +639,12 @@ var carousel;
 				settings.onReady();
 			}
 		});
+
+		return this;
 	};
+
+	WeruPlayer = jQuery('#weru-players').WeruPlayer({
+		'onReady' : function() {
+		}
+	});
 })(jQuery);

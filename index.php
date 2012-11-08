@@ -25,7 +25,7 @@
 		<title>Weru Channels Player - Create amazing music channels for you and your friends.</title>
 	</head>
 	<body>
-		<iframe id="player-frame" name="controls-frame" width="662" height="78" scrolling="no" allowtransparency="yes" frameborder="0" src="controls.php"></iframe>
-		<iframe id="playlist-frame" name="player-frame" width="1000" height="325" scrolling="no" allowtransparency="yes" frameborder="0" src="player.php"></iframe>
+		<iframe id="controls-frame" name="controls-frame" width="662" height="78" scrolling="no" allowtransparency="yes" frameborder="0" src="controls.php"></iframe>
+		<iframe id="player-frame" name="player-frame" width="1000" height="325" scrolling="no" allowtransparency="yes" frameborder="0" src="player.php"></iframe>
 	</body>
 </html>
