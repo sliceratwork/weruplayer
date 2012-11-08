@@ -42,11 +42,25 @@
 		<title>Weru Channels Player - Create amazing music channels for you and your friends.</title>
 	</head>
 	<body>
+		<?php
+			$playlist = $defaultPlaylist = 'test-resources/playlist-1.json';
+			if (!empty($_GET['playlist'])) {
+				$playlist = $_GET['playlist'];
+			}
+	
+			try {
+				$json = file_get_contents($playlist);
+				$data = json_decode($json, TRUE);
+			} catch(Exception $e) {
+				$json = file_get_contents($defaultPlaylist);
+				$data = json_decode($json, TRUE);
+			}
+		?>
 		<!--channel switcher-->
 		<div id="channel-switcher">
 			<label for="channel-select">Now playing</label>
 			<select id="channel-select" name="channel-select">
-				<option value="">Please select a channel</option>
+				<option value="<?php echo $playlist; ?>"><?php echo $data['title']; ?></option>
 			</select>
 		</div>
 		<!--/channel switcher-->
@@ -70,11 +84,11 @@
 				<!--/jplayer-->
 				
 				<!--youtube player-->
-				<iframe id="youtube-player" type="text/html" src="http://www.youtube.com/embed/?enablejsapi=1&origin=http://weruchannels.com" class="player" width="445" height="274" frameborder="0" allowtransparency="yes" scrolling="no" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+				<iframe id="youtube-player" type="text/html" src="http://www.youtube.com/embed/?enablejsapi=1&origin=http://weruplayer.com" class="player" width="445" height="274" frameborder="0" allowtransparency="yes" scrolling="no" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
 				<!--youtube player-->
 				
 				<!--vimeo player-->
-				<iframe id="vimeo-player" src="http://player.vimeo.com/video/29037955?api=1&color=ffffff&player_id=player2" class="player" width="445" height="274" frameborder="0" allowtransparency="yes" scrolling="no" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+				<iframe id="vimeo-player" src="http://player.vimeo.com/video/29037955?api=1&color=ffffff&player_id=vimeo-player" class="player" width="445" height="274" frameborder="0" allowtransparency="yes" scrolling="no" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
 				<!--/vimeo player-->
 				
 				<!--soundcloud player-->
@@ -98,14 +112,17 @@
 		<script type="text/javascript" src="scripts/jquery.qtip.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="scripts/player.js" charset="utf-8"></script>
 		<script type="text/javascript">
-			<?php
-				$playlist = '/test-resources/playlist-1.json';
-				if(!empty($_GET['playlist'])){
-					$playlist = $_GET['playlist'];
-				}
-			?>
 			
-			WeruPlayer.getMedia('<?php echo $playlist; ?>');
+			
+			(function($){
+				$('#weru-players').WeruPlayer({
+					'onReady': function(){
+						window.console.log(this);
+					},'hello': function(){
+						
+					}
+				});
+			})(jQuery);
 		</script>
 	</body>
 </html>
