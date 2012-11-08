@@ -182,6 +182,11 @@ var WeruPlayer, carousel;
 			player = media.type;
 
 			highlight(playIndex);
+			
+			//open the player
+ 			if(!hidden){
+ 				openPlayer();
+ 			}
 
 			switch(player) {
 				//youtube
@@ -284,7 +289,7 @@ var WeruPlayer, carousel;
 			}
 		}
 		//private variables
-		var playlist = [], players = $('#weru-players'), reposInt = null, ready = 0,
+		var playlist = [], players = $('#weru-players'), reposInt = null, ready = 0, hidden = true,
 
 		//players
 		player, playerAudio, frameVimeo, playerVimeo, frameSoundCloud, playerSoundCloud, playerYouTube, currentYouTube, currentVimeo, currentSC, currentAudio, widgetURL = 'http://api.soundcloud.com/users/1539950/favorites', currentItem = -1, watchYT = null;
@@ -525,6 +530,8 @@ var WeruPlayer, carousel;
 					'width' : 445
 				});
 			}
+			
+			hidden = false;
 
 			repositionPlayer();
 		}
@@ -549,6 +556,8 @@ var WeruPlayer, carousel;
 					'width' : 0
 				});
 			}
+			
+			hidden = true;
 
 			repositionPlayer();
 		}
@@ -592,7 +601,10 @@ var WeruPlayer, carousel;
 		//highlight current item
 		function highlight(index) {
 			$('#playlist > li b').removeClass('on');
-			$('#playlist > li').removeClass('on').eq(index).addClass('on').find('b').addClass('on');
+			$('#playlist > li').removeClass('on').eq(index).addClass('on');
+			if(!hidden){
+ 				$('#playlist > li.on b').addClass('on');
+ 			}
 		}
 
 		//pretty tooltips
