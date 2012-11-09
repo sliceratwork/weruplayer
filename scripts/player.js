@@ -5,7 +5,7 @@ var YTScriptTag = document.getElementsByTagName('script')[0];
 YTScriptTag.parentNode.insertBefore(tag, YTScriptTag);
 
 //make the player a global variable
-var WeruPlayer, carousel;
+var WeruPlayer, carousel, feedContent;
 
 (function($) {
 	jQuery.fn.WeruPlayer = function(options) {
@@ -43,7 +43,7 @@ var WeruPlayer, carousel;
 		//play
 		self.play = function() {
 			hidePlayButton();
-
+			
 			switch(player) {
 				//soundcloud
 				case 'soundcloud':
@@ -67,13 +67,6 @@ var WeruPlayer, carousel;
 				//audio
 				case 'audio':
 					playerAudio.jPlayer('play');
-					break;
-
-				//everything else
-				default:
-					self.stop();
-					playIndex++;
-					self.playNext();
 					break;
 			}
 
@@ -112,6 +105,27 @@ var WeruPlayer, carousel;
 
 		//stop
 		self.stop = function() {
+			switch(player) {
+				//soundcloud
+				case 'soundcloud':
+					playerSoundCloud.pause();
+					break;
+
+				//vimeo
+				case 'vimeo':
+					playerVimeo.api('unload');
+					break;
+
+				//youtube
+				case 'youtube':
+					playerYouTube.stopVideo();
+					break;
+
+				//audio
+				case 'audio':
+					playerAudio.jPlayer('stop');
+					break;
+			}
 		},
 
 		//play previous
@@ -146,7 +160,7 @@ var WeruPlayer, carousel;
 		},
 
 		//get media
-		self.getMedia = function(url) {
+		self.getMedia = function(url, callback) {
 			//make an AJAX request to get the playlist
 			$.ajax({
 				'type' : 'get',
@@ -157,16 +171,35 @@ var WeruPlayer, carousel;
 					resetDisplay();
 				},
 				'success' : function(response) {
-					if (response.playlist.length) {
+					//cache the response
+					feedContent = response;
+					
+					var len = feedContent.items.length,
+						options = '';
+					
+					//check if we have content
+					if (len) {
+						//create the options for the channel switcher
+						for (var i = 0; i < len; i++) {
+							options += '<option id="playlist-' + i + '" value="' + i + '">' + feedContent.items[i].title + '</option>';
+						}
+						
+						//populate the channel switcher
+						$('#channel-select').html(options);
+						$('#channel-select').trigger('liszt:updated');
+						
+						//populate the playlist carousel
+						$('#playlist').html(feedContent.items[0].tiles);
+						
 						//create new playlist
-						playlist = response.playlist;
-
-						//create carousel
-						$('#playlist').html(response.html);
+						playlist = feedContent.items[0].playlist;
+						
+						//create new carousel
 						createCarousel();
-
-						//set the first item in the playlist
-						self.setMedia(0);
+						
+						if(typeof callback == 'function'){
+							callback();
+						}
 					}
 				},
 				'error' : function() {
@@ -176,17 +209,28 @@ var WeruPlayer, carousel;
 				}
 			});
 		},
+		
 		//set media
-		self.setMedia = function(playIndex) {
+		self.setMedia = function(playIndex, callback) {
+			stopWatchYT();
+			
 			var media = playlist[playIndex];
 			player = media.type;
-
+			
+			//clear the display
+			resetDisplay();
+			
+			//highlight currently playing track
 			highlight(playIndex);
 			
+			//toggle players
+			$('.player').addClass('player-hidden');
+			$('#' + player + '-player').removeClass('player-hidden');
+
 			//open the player
- 			if(!hidden){
- 				openPlayer();
- 			}
+			if (!hidden) {
+				openPlayer();
+			}
 
 			switch(player) {
 				//youtube
@@ -287,7 +331,40 @@ var WeruPlayer, carousel;
 					}
 					break;
 			}
+			
+			if(typeof callback == 'function'){
+				callback();
+			}
+		},
+		
+		//seek to time
+		self.seekTo = function(time){
+			time = time || 0;
+			
+			switch(player) {
+				//soundcloud
+				case 'soundcloud':
+					playerSoundCloud.seekTo(time);
+					break;
+
+				//vimeo
+				case 'vimeo':
+					playerVimeo.api('seekTo', time * 1000);
+					break;
+
+				//youtube
+				case 'youtube':
+					playerYouTube.seekTo(time * 1000);
+					break;
+
+				//audio
+				case 'audio':
+					playerAudio.jPlayer( "playHead", time );
+					break;
+			}
 		}
+		
+		
 		//private variables
 		var playlist = [], players = $('#weru-players'), reposInt = null, ready = 0, hidden = true,
 
@@ -509,16 +586,15 @@ var WeruPlayer, carousel;
 
 				}
 			});
-			repositionPlayer();
 		}
 
 		//open the player
 		function openPlayer(slide) {
 			if (slide) {
-				$('#playlist li').css('padding-right', 20).filter('.on').animate({
+				$('#playlist li').css('padding-right', 20).filter('.on').stop().animate({
 					'padding-right' : 485
 				});
-				players.css('height', 270).animate({
+				players.css('height', 270).stop().animate({
 					'width' : 445
 				});
 			} else {
@@ -530,7 +606,7 @@ var WeruPlayer, carousel;
 					'width' : 445
 				});
 			}
-			
+
 			hidden = false;
 
 			repositionPlayer();
@@ -539,10 +615,10 @@ var WeruPlayer, carousel;
 		//close player
 		function closePlayer(slide) {
 			if (slide) {
-				$('#playlist li').animate({
+				$('#playlist li').stop().animate({
 					'padding-right' : 20
 				});
-				players.animate({
+				players.stop().animate({
 					'width' : 0
 				}, function() {
 					players.css('height', 270);
@@ -556,7 +632,7 @@ var WeruPlayer, carousel;
 					'width' : 0
 				});
 			}
-			
+
 			hidden = true;
 
 			repositionPlayer();
@@ -570,10 +646,11 @@ var WeruPlayer, carousel;
 
 		//when we click on a tile
 		$(document).on('click', '#playlist a.tile-image', function() {
+			//stop currently playing track
+			self.stop();
+			
 			//update the play index
 			currentItem = $('#playlist a.tile-image').index(this);
-
-			self.stop();
 
 			//set the new media
 			self.setMedia(currentItem, function() {
@@ -602,9 +679,9 @@ var WeruPlayer, carousel;
 		function highlight(index) {
 			$('#playlist > li b').removeClass('on');
 			$('#playlist > li').removeClass('on').eq(index).addClass('on');
-			if(!hidden){
- 				$('#playlist > li.on b').addClass('on');
- 			}
+			if (!hidden) {
+				$('#playlist > li.on b').addClass('on');
+			}
 		}
 
 		//pretty tooltips
@@ -618,34 +695,37 @@ var WeruPlayer, carousel;
 			}
 		});
 
-		//cool dropdown
-		$('#channel-select').chosen({});
+		//channel/playlist
+		$('#channel-select').chosen();
+		$('#channel-select').bind('change propertychange', function() {
+			//stop the player
+			self.stop();
+			
+			//clear the display
+			resetDisplay();
+			
+			//update the playlist
+			playlist = feedContent.items[$(this).val()].playlist;
+			
+			//update the playlist carousel
+			$('#playlist').html(feedContent.items[$(this).val()].tiles);
+			
+			//update the carousel
+			createCarousel();
+			
+			//set new media
+			self.setMedia(0, function(){
+				//play new playlist
+				self.play();
+			});
+		});
 
 		//when the player is ready
 		self.bind('changeData', function() {
 			if (ready == 3) {
-				/***********************************/
-				// Channel/Playlist Loading
-				/***********************************/
-				$('#channel-select').on('change propertychange', function() {
-					//store the new channel
-					currentChannel = $('#channel-select').attr("selectedIndex");
-
-					//get the new media
-					self.getMedia($('#channel-select').val(), {}, function(response) {
-						//cue the first item
-						self.setMedia(playlist[currentItem], function() {
-							//play it
-							self.play();
-						});
-					});
-				});
-
 				//we first load the playlist
-				self.getMedia($('#channel-select').val(), {}, function(response) {
-					//then we cue the first item
-					self.setMedia(playlist[currentItem], function() {
-					});
+				self.getMedia(feed, function(){
+					self.setMedia(0);
 				});
 
 				settings.onReady();

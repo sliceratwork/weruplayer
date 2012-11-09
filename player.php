@@ -42,26 +42,10 @@
 		<title>Weru Channels Player - Create amazing music channels for you and your friends.</title>
 	</head>
 	<body>
-		<?php
-			$playlist = $defaultPlaylist = 'test-resources/playlist-1.json';
-			if (!empty($_GET['playlist'])) {
-				$playlist = $_GET['playlist'];
-			}
-	
-			try {
-				$json = file_get_contents($playlist);
-				$data = json_decode($json, TRUE);
-			} catch(Exception $e) {
-				$json = file_get_contents($defaultPlaylist);
-				$data = json_decode($json, TRUE);
-			}
-		?>
 		<!--channel switcher-->
 		<div id="channel-switcher">
 			<label for="channel-select">Now playing</label>
-			<select id="channel-select" name="channel-select">
-				<option value="<?php echo $playlist; ?>"><?php echo $data['title']; ?></option>
-			</select>
+			<select id="channel-select" name="channel-select"></select>
 		</div>
 		<!--/channel switcher-->
 		
@@ -84,16 +68,18 @@
 				<!--/jplayer-->
 				
 				<!--youtube player-->
-				<iframe id="youtube-player" type="text/html" src="http://www.youtube.com/embed/?enablejsapi=1&origin=http://weruplayer.com&wmode=transparent" class="player" width="445" height="274" frameborder="0" allowtransparency="yes" scrolling="no" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+				<iframe id="youtube-player" type="text/html" src="http://www.youtube.com/embed/?enablejsapi=1&origin=http://weruplayer.com&wmode=transparent&controls=0&showinfo=0" class="player player-hidden" width="445" height="274" frameborder="0" allowtransparency="yes" scrolling="no" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
 				<!--youtube player-->
 				
 				<!--vimeo player-->
-				<iframe id="vimeo-player" src="http://player.vimeo.com/video/29037955?api=1&color=ffffff&player_id=vimeo-player" class="player" width="445" height="274" frameborder="0" allowtransparency="yes" scrolling="no" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+				<iframe id="vimeo-player" src="http://player.vimeo.com/video/29037955?api=1&color=ffffff&player_id=vimeo-player" class="player player-hidden" width="445" height="274" frameborder="0" allowtransparency="yes" scrolling="no" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
 				<!--/vimeo player-->
 				
 				<!--soundcloud player-->
-				<iframe id="soundcloud-player" src="http://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F36004412&show_artwork=true&show_comments=false&sharing=false&download=false&liking=false&buying=false&enable_api=true" class="player" width="445" height="274" frameborder="0" allowtransparency="yes" scrolling="no" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+				<iframe id="soundcloud-player" src="http://w.soundcloud.com/player/?url=http%3A%2F%2Fapi.soundcloud.com%2Ftracks%2F36004412&show_artwork=true&show_comments=false&sharing=false&download=false&liking=false&buying=false&enable_api=true" class="player player-hidden" width="445" height="274" frameborder="0" allowtransparency="yes" scrolling="no" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
 				<!--/soundcloud player-->
+				
+				<div id="player-overlay"></div>
 			</div>
 			<!--/players-->
 		</div>
@@ -110,6 +96,9 @@
 		<script type="text/javascript" src="scripts/jquery-ajax-localstorage-cache.js" charset="utf-8"></script>
 		<script type="text/javascript" src="scripts/jquery.chosen.min.js" charset="utf-8"></script>
 		<script type="text/javascript" src="scripts/jquery.qtip.min.js" charset="utf-8"></script>
+		<script type="text/javascript">
+			var feed = 'test-resources/playlist-1.json';
+		</script>
 		<script type="text/javascript" src="scripts/player.js" charset="utf-8"></script>
 	</body>
 </html>
