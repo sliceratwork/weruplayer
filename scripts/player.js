@@ -133,25 +133,45 @@ var WeruPlayer, carousel, feedContent;
 			//decrement the current play index
 			if(currentItem > 0){
 				currentItem--;
+				
+				//set new media
+				self.setMedia(currentItem, function(){
+					self.play();
+				});
+			} else {
+				currentChannel--;
+				if(currentChannel < 0){
+					currentChannel = $('#channel-select option').length - 1;
+				}
+				
+				currentItem = playlist[playlist.length - 1];
+				
+				$('#channel-select')[0].selectedIndex = currentChannel;
+				$('#channel-select').trigger('change');
+				$('#channel-select').trigger('liszt:updated');
 			}
-			
-			//set new media
-			self.setMedia(currentItem, function(){
-				self.play();
-			});
 		},
 
 		//play next
 		self.next = function() {
-			//increment the current [lay index
-			if(currentItem < playlist.length){
+			//increment the current play index
+			if(currentItem < (playlist.length - 1)){
 				currentItem++;
+				
+				//set new media
+				self.setMedia(currentItem, function(){
+					self.play();
+				});
+			} else {
+				currentChannel++;
+				if(currentChannel >= $('#channel-select option').length){
+					currentChannel = 0;
+				}
+				
+				$('#channel-select')[0].selectedIndex = currentChannel;
+				$('#channel-select').trigger('change');
+				$('#channel-select').trigger('liszt:updated');
 			}
-			
-			//set new media
-			self.setMedia(currentItem, function(){
-				self.play();
-			});
 		},
 
 		//mute
@@ -253,6 +273,12 @@ var WeruPlayer, carousel, feedContent;
 						
 						//create new playlist
 						playlist = feedContent.items[0].playlist;
+						
+						//set current track
+						currentItem = 0;
+						
+						//set channel index
+						currentChannel = 0;
 						
 						//create new carousel
 						createCarousel();
@@ -468,7 +494,7 @@ var WeruPlayer, carousel, feedContent;
 		
 		
 		//private variables
-		var playlist = [], players = $('#weru-players'), reposInt = null, ready = 0, hidden = true,
+		var playlist = [], players = $('#weru-players'), reposInt = null, ready = 0, hidden = true, currentChannel = -1,
 
 		//players
 		player, playerAudio, frameVimeo, playerVimeo, frameSoundCloud, playerSoundCloud, playerYouTube, currentYouTube, currentVimeo, currentSC, currentAudio, widgetURL = 'http://api.soundcloud.com/users/1539950/favorites', currentItem = -1, watchYT = null;
@@ -504,11 +530,13 @@ var WeruPlayer, carousel, feedContent;
 
 			//when it's paused
 			if (event.data == 2) {
+				stopWatchYT();
 				showPlayButton();
 			}
 
 			//when it ends
 			if (event.data == 0) {
+				stopWatchYT();
 				showPlayButton();
 			}
 		}
@@ -818,11 +846,17 @@ var WeruPlayer, carousel, feedContent;
 			//update the playlist carousel
 			$('#playlist').html(feedContent.items[$(this).val()].tiles);
 			
+			//set new channel index
+			currentChannel = $('#channel-select')[0].selectedIndex;
+			
+			//update current track
+			currentItem = 0;
+			
 			//update the carousel
 			createCarousel();
 			
 			//set new media
-			self.setMedia(0, function(){
+			self.setMedia(currentItem, function(){
 				//play new playlist
 				self.play();
 			});
