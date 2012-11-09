@@ -75,17 +75,13 @@ body {
         left: 0;
     }
     
-    #weru-players iframe {
-        position: relative;
-        z-index: 1;
-    }
-    
     .player-hidden {
         width: 1px;
         height: 1px;
         overflow: hidden;
         visibility: hidden;
         zoom: 1;
+        position: absolute;
     }
     
     /* tiles */
