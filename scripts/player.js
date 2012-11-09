@@ -404,24 +404,7 @@ var WeruPlayer, carousel, feedContent;
 							try{
 								//update the player title
 								$('#track-title-inner', top.frames['controls-frame'].document).text(media.title);
-	
-								playerVimeo.api('getDuration', function(value, player_id) {
-									//update the player time
-									$('#duration', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(value));
-								});
-								
-								//update the current time
-								playerVimeo.addEvent('playProgress', function (data) {
-	                                //update the current time
-	                                $('#current-time', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(parseInt(data.seconds)));
-	                                
-	                                //update the play bar width
-	                                $('#play-bar', top.frames['controls-frame'].document).css({
-										'width' : (data.percent * 100) + '%'
-									});
-	                            });
 							} catch(e){}
-							
 
 							//callback
 							if ( typeof callback == 'function') {
@@ -434,22 +417,6 @@ var WeruPlayer, carousel, feedContent;
 						try{
 							//update the player title
 							$('#track-title-inner', top.frames['controls-frame'].document).text(media.title);
-	
-							playerVimeo.api('getDuration', function(value, player_id) {
-								//update the player time
-								$('#duration', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(value));
-							});
-							
-							//update the current time
-							playerVimeo.addEvent('playProgress', function (data) {
-	                            //update the current time
-	                            $('#current-time', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(data.seconds));
-	                            
-	                            //update the play bar width
-	                            $('#play-bar', top.frames['controls-frame'].document).css({
-									'width' : (data.percent * 100) + '%'
-								});
-	                        });
 						} catch(e){}
 
 						//callback
@@ -457,6 +424,12 @@ var WeruPlayer, carousel, feedContent;
 							callback();
 						}
 					}
+					
+					playerVimeo.api('getDuration', function(value, player_id) {
+						//update the player time
+						$('#duration', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(value));
+					});
+					
 					break;
 			}
 			
@@ -653,7 +626,17 @@ var WeruPlayer, carousel, feedContent;
 
 		//add event listeners
 		//ready
-		playerVimeo.addEvent('ready', function(data) {
+		playerVimeo.addEvent('ready', function(data) {			
+			//update the current time
+			playerVimeo.addEvent('playProgress', function (data) {
+                //update the current time
+                $('#current-time', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(parseInt(data.seconds)));
+                
+                //update the play bar width
+                $('#play-bar', top.frames['controls-frame'].document).css({
+					'width' : (data.percent * 100) + '%'
+				});
+            });
 		});
 
 		//toggle play/pause buttons
