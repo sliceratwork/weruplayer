@@ -68,6 +68,7 @@
 				<div id="duration">00:00</div>
 			</div>
 			<!--/display-->
+			<div id="controls-overlay"></div>
 		</div>
 		<!--/player-->
 		

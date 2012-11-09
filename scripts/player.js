@@ -130,10 +130,28 @@ var WeruPlayer, carousel, feedContent;
 
 		//play previous
 		self.prev = function() {
+			//decrement the current play index
+			if(currentItem > 0){
+				currentItem--;
+			}
+			
+			//set new media
+			self.setMedia(currentItem, function(){
+				self.play();
+			});
 		},
 
 		//play next
 		self.next = function() {
+			//increment the current [lay index
+			if(currentItem < playlist.length){
+				currentItem++;
+			}
+			
+			//set new media
+			self.setMedia(currentItem, function(){
+				self.play();
+			});
 		},
 
 		//mute
@@ -752,6 +770,9 @@ var WeruPlayer, carousel, feedContent;
 		//when the player is ready
 		self.bind('changeData', function() {
 			if (ready == 3) {
+				//hide the controls overlay
+				$('#controls-overlay', top.frames['controls-frame'].document).hide();
+				
 				//we first load the playlist
 				self.getMedia(feed, function(){
 					self.setMedia(0);
