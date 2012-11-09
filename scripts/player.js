@@ -49,14 +49,14 @@ var WeruPlayer, carousel, feedContent;
 				case 'soundcloud':
 					setTimeout(function() {
 						playerSoundCloud.play();
-					}, 500);
+					}, 700);
 					break;
 
 				//vimeo
 				case 'vimeo':
 					setTimeout(function() {
 						playerVimeo.api('play');
-					}, 500);
+					}, 700);
 					break;
 
 				//youtube
@@ -156,10 +156,52 @@ var WeruPlayer, carousel, feedContent;
 
 		//mute
 		self.mute = function() {
+			//mute jplayer
+			playerAudio.jPlayer('mute');
+	
+			//mute youtube player
+			playerYouTube.mute();
+	
+			//mute vimeo player
+			playerVimeo.api('setVolume', 0);
+	
+			//mute soundcloud player
+			playerSoundCloud.setVolume(0);
+	
+			self.muted = true;
+			
+			try{
+				//hide the mute button
+				$('#mute', top.frames['controls-frame'].document).hide();
+	
+				//show the unmute button
+				$('#unmute', top.frames['controls-frame'].document).show();
+			} catch(e){}
 		},
 
 		//unmute
 		self.unmute = function() {
+			//unmute jplayer
+			playerAudio.jPlayer('unmute');
+	
+			//unmute youtube player
+			playerYouTube.unMute();
+	
+			//unmute vimeo player
+			playerVimeo.api('setVolume', settings.volume);
+	
+			//unmute soundcloud player
+			playerSoundCloud.setVolume(settings.volume);
+	
+			self.muted = false;
+			
+			try{
+				//show the mute button
+				$('#mute', top.frames['controls-frame'].document).show();
+	
+				//hide the unmute button
+				$('#unmute', top.frames['controls-frame'].document).hide();
+			} catch(e){}
 		},
 
 		//set volume
@@ -230,6 +272,10 @@ var WeruPlayer, carousel, feedContent;
 		
 		//set media
 		self.setMedia = function(playIndex, callback) {
+			//stop the player
+			self.stop();
+			
+			//clear youtube interval
 			stopWatchYT();
 			
 			var media = playlist[playIndex];
@@ -259,7 +305,9 @@ var WeruPlayer, carousel, feedContent;
 						currentYouTube = media.id;
 					}
 
-					$('#track-title-inner', top.frames['controls-frame'].document).text(media.title);
+					try{
+						$('#track-title-inner', top.frames['controls-frame'].document).text(media.title);
+					} catch(e){}
 
 					if ( typeof callback == 'function') {
 						setTimeout(function() {
@@ -282,12 +330,15 @@ var WeruPlayer, carousel, feedContent;
 							'download' : false,
 							'auto_play' : false,
 							'callback' : function(response) {
-								$('#track-title-inner', top.frames['controls-frame'].document).text(media.title);
+								try{
+									$('#track-title-inner', top.frames['controls-frame'].document).text(media.title);
+								} catch(e){}
 
 								//update the soundcloud duration
 								playerSoundCloud['getDuration'](function(value) {
-									durationSoundCloud = value;
-									$('#duration', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(durationSoundCloud / 1000));
+									try{
+										$('#duration', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(value / 1000));
+									} catch(e){}
 								});
 
 								if ( typeof callback == 'function') {
@@ -298,12 +349,15 @@ var WeruPlayer, carousel, feedContent;
 
 						currentSC = media.id;
 					} else {
-						$('#track-title-inner', top.frames['controls-frame'].document).text(media.title);
+						try{
+							$('#track-title-inner', top.frames['controls-frame'].document).text(media.title);
+						} catch(e){}
 
 						//update the soundcloud duration
 						playerSoundCloud['getDuration'](function(value) {
-							durationSoundCloud = value;
-							$('#duration', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(durationSoundCloud / 1000));
+							try{
+								$('#duration', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(value / 1000));
+							} catch(e){}
 						});
 
 						if ( typeof callback == 'function') {
@@ -321,26 +375,27 @@ var WeruPlayer, carousel, feedContent;
 
 						//when the frame has loaded
 						frameVimeo.load(function() {
-							//update the player title
-							$('#track-title-inner', top.frames['controls-frame'].document).text(media.title);
-
-							playerVimeo.api('getDuration', function(value, player_id) {
-								durationVimeo = value;
-
-								//update the player time
-								$('#duration', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(durationVimeo));
-							});
-							
-							//update the current time
-							playerVimeo.addEvent('playProgress', function (data) {
-                                //update the current time
-                                $('#current-time', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(parseInt(data.seconds)));
-                                
-                                //update the play bar width
-                                $('#play-bar', top.frames['controls-frame'].document).css({
-									'width' : (data.percent * 100) + '%'
+							try{
+								//update the player title
+								$('#track-title-inner', top.frames['controls-frame'].document).text(media.title);
+	
+								playerVimeo.api('getDuration', function(value, player_id) {
+									//update the player time
+									$('#duration', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(value));
 								});
-                            });
+								
+								//update the current time
+								playerVimeo.addEvent('playProgress', function (data) {
+	                                //update the current time
+	                                $('#current-time', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(parseInt(data.seconds)));
+	                                
+	                                //update the play bar width
+	                                $('#play-bar', top.frames['controls-frame'].document).css({
+										'width' : (data.percent * 100) + '%'
+									});
+	                            });
+							} catch(e){}
+							
 
 							//callback
 							if ( typeof callback == 'function') {
@@ -350,26 +405,26 @@ var WeruPlayer, carousel, feedContent;
 
 						currentVimeo = media.id;
 					} else {
-						//update the player title
-						$('#track-title-inner', top.frames['controls-frame'].document).text(media.title);
-
-						playerVimeo.api('getDuration', function(value, player_id) {
-							durationVimeo = value;
-
-							//update the player time
-							$('#duration', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(durationVimeo));
-						});
-						
-						//update the current time
-						playerVimeo.addEvent('playProgress', function (data) {
-                            //update the current time
-                            $('#current-time', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(data.seconds));
-                            
-                            //update the play bar width
-                            $('#play-bar', top.frames['controls-frame'].document).css({
-								'width' : (data.percent * 100) + '%'
+						try{
+							//update the player title
+							$('#track-title-inner', top.frames['controls-frame'].document).text(media.title);
+	
+							playerVimeo.api('getDuration', function(value, player_id) {
+								//update the player time
+								$('#duration', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(value));
 							});
-                        });
+							
+							//update the current time
+							playerVimeo.addEvent('playProgress', function (data) {
+	                            //update the current time
+	                            $('#current-time', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(data.seconds));
+	                            
+	                            //update the play bar width
+	                            $('#play-bar', top.frames['controls-frame'].document).css({
+									'width' : (data.percent * 100) + '%'
+								});
+	                        });
+						} catch(e){}
 
 						//callback
 						if ( typeof callback == 'function') {
@@ -441,8 +496,10 @@ var WeruPlayer, carousel, feedContent;
 			if (event.data == 1) {
 				startWatchYT();
 
-				//update the total time
-				$('#duration', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(playerYouTube.getDuration()));
+				try{
+					//update the total time
+					$('#duration', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(playerYouTube.getDuration()));
+				}catch(e){}
 			}
 
 			//when it's paused
@@ -461,13 +518,15 @@ var WeruPlayer, carousel, feedContent;
 			stopWatchYT();
 
 			watchYT = setInterval(function() {
-				//update the current time
-				$('#current-time', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(playerYouTube.getCurrentTime()));
-
-				//update play bar
-				$('#play-bar', top.frames['controls-frame'].document).css({
-					'width' : ((playerYouTube.getCurrentTime() / playerYouTube.getDuration()) * 100) + '%'
-				});
+				try{
+					//update the current time
+					$('#current-time', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(playerYouTube.getCurrentTime()));
+	
+					//update play bar
+					$('#play-bar', top.frames['controls-frame'].document).css({
+						'width' : ((playerYouTube.getCurrentTime() / playerYouTube.getDuration()) * 100) + '%'
+					});
+				}catch(e){}
 			}, 1000);
 		}
 
@@ -496,17 +555,21 @@ var WeruPlayer, carousel, feedContent;
 				settings.onStop();
 			},
 			'timeupdate' : function(event) {
-				//update the current time
-				$('#current-time', top.frames['controls-frame'].document).text($.jPlayer.convertTime(event.jPlayer.status.currentTime));
-
-				//update the width of the playbar
-				$('#playbar', top.frames['controls-frame'].document).css({
-					'width' : event.jPlayer.status.currentPercentRelative + '%'
-				});
+				try{
+					//update the current time
+					$('#current-time', top.frames['controls-frame'].document).text($.jPlayer.convertTime(event.jPlayer.status.currentTime));
+	
+					//update the width of the playbar
+					$('#playbar', top.frames['controls-frame'].document).css({
+						'width' : event.jPlayer.status.currentPercentRelative + '%'
+					});
+				} catch(e){}
 			},
 			'progress' : function(event) {
-				//update the duration
-				$('#duration', top.frames['controls-frame'].document).text($.jPlayer.convertTime(event.jPlayer.status.duration));
+				try{
+					//update the duration
+					$('#duration', top.frames['controls-frame'].document).text($.jPlayer.convertTime(event.jPlayer.status.duration));
+				} catch(e){}
 			}
 		});
 
@@ -541,19 +604,18 @@ var WeruPlayer, carousel, feedContent;
 		});
 
 		//while playing
-		playerSoundCloud.bind(SC.Widget.Events.PLAY_PROGRESS, function() {
-			//update the current time
-			playerSoundCloud['getPosition'](function(value) {
-				$('#current-time', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(value / 1000));
-			});
-
-			//update the width of the playbar
-			playerSoundCloud['getPosition'](function(value) {
-				$('#play-bar', top.frames['controls-frame'].document).css({
-					'width' : ((value / durationSoundCloud) * 100) + '%'
+		playerSoundCloud.bind(SC.Widget.Events.PLAY_PROGRESS, function(data) {
+			try{
+				playerSoundCloud['getPosition'](function(value) {
+					//update the current time
+					$('#current-time', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(value / 1000));
 				});
-			});
-
+				
+				//update the width of the playbar
+				$('#play-bar', top.frames['controls-frame'].document).css({
+					'width' : (data[0].relativePosition * 100) + '%'
+				});
+			} catch(e){}
 		});
 
 		//#########################################
@@ -568,42 +630,47 @@ var WeruPlayer, carousel, feedContent;
 
 		//toggle play/pause buttons
 		function hidePlayButton() {
-			//hide the play button
-			$('#play', top.frames['controls-frame'].document).hide();
-			//show the pause button
-			$('#pause', top.frames['controls-frame'].document).show();
+			try{
+				//hide the play button
+				$('#play', top.frames['controls-frame'].document).hide();
+				//show the pause button
+				$('#pause', top.frames['controls-frame'].document).show();
+			} catch(e){}
 		}
 
 		function showPlayButton() {
-			//show the play button
-			$('#play', top.frames['controls-frame'].document).show();
-
-			//hide the pause button
-			$('#pause', top.frames['controls-frame'].document).hide();
+			try{
+				//show the play button
+				$('#play', top.frames['controls-frame'].document).show();
+				//hide the pause button
+				$('#pause', top.frames['controls-frame'].document).hide();
+			} catch(e){}
 		}
 
 		//reset display
 		function resetDisplay(message) {
 			message = message || 'Loading media ...';
 
-			//reset current time
-			$('#current-time', top.frames['controls-frame'].document).text('00:00');
-
-			//reset duration
-			$('#duration', top.frames['controls-frame'].document).text('00:00');
-
-			//reset title
-			$('#track-title-inner', top.frames['controls-frame'].document).text(message);
-
-			//reset the load bar
-			$('#load-bar', top.frames['controls-frame'].document).css({
-				'width' : 0
-			});
-
-			//reset the play bar
-			$('#play-bar', top.frames['controls-frame'].document).css({
-				'width' : 0
-			});
+			try{
+				//reset current time
+				$('#current-time', top.frames['controls-frame'].document).text('00:00');
+	
+				//reset duration
+				$('#duration', top.frames['controls-frame'].document).text('00:00');
+	
+				//reset title
+				$('#track-title-inner', top.frames['controls-frame'].document).text(message);
+	
+				//reset the load bar
+				$('#load-bar', top.frames['controls-frame'].document).css({
+					'width' : 0
+				});
+	
+				//reset the play bar
+				$('#play-bar', top.frames['controls-frame'].document).css({
+					'width' : 0
+				});
+			} catch(e){}
 		}
 
 		//create playlist carousel
@@ -693,9 +760,6 @@ var WeruPlayer, carousel, feedContent;
 
 		//when we click on a tile
 		$(document).on('click', '#playlist a.tile-image', function() {
-			//stop currently playing track
-			self.stop();
-			
 			//update the play index
 			currentItem = $('#playlist a.tile-image').index(this);
 
@@ -745,9 +809,6 @@ var WeruPlayer, carousel, feedContent;
 		//channel/playlist
 		$('#channel-select').chosen();
 		$('#channel-select').bind('change propertychange', function() {
-			//stop the player
-			self.stop();
-			
 			//clear the display
 			resetDisplay();
 			
@@ -771,7 +832,9 @@ var WeruPlayer, carousel, feedContent;
 		self.bind('changeData', function() {
 			if (ready == 3) {
 				//hide the controls overlay
-				$('#controls-overlay', top.frames['controls-frame'].document).hide();
+				try{
+					$('#controls-overlay', top.frames['controls-frame'].document).hide();
+				} catch(e){}
 				
 				//we first load the playlist
 				self.getMedia(feed, function(){
