@@ -695,15 +695,29 @@ var WeruPlayer, carousel, feedContent;
 		playerVimeo.addEvent('ready', function(data) {
 			checkReady(++ready);
 			
+			 playerVimeo.addEvent('loadProgress', function(data) {
+			 	if(data.percent < 1){
+			 		//update the load bar width
+	                $('#load-bar', top.frames['controls-frame'].document).css({
+						'width' : (data.percent * 100) + '%'
+					});
+			 	}
+				
+				//update the total video duration
+				$('#duration', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(parseInt(data.duration)));
+            });
+			
 			//update the current time
 			playerVimeo.addEvent('playProgress', function (data) {
                 //update the current time
                 $('#current-time', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(parseInt(data.seconds)));
                 
                 //update the play bar width
-                $('#play-bar', top.frames['controls-frame'].document).css({
-					'width' : (data.percent * 100) + '%'
-				});
+                if(data.percent < 1){
+	                $('#play-bar', top.frames['controls-frame'].document).css({
+						'width' : (data.percent * 100) + '%'
+					});
+                }
             });
             
             //when the player plays
@@ -724,11 +738,6 @@ var WeruPlayer, carousel, feedContent;
 				playerAudio.jPlayer('stop');
             	
             	hidePlayButton();
-            	
-            	playerVimeo.api('getDuration', function(value, player_id) {
-					//update the player time
-					$('#duration', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(parseInt(value)));
-				});
             });
             
             //when the player ends
