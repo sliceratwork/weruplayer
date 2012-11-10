@@ -180,13 +180,11 @@ var WeruPlayer, carousel, feedContent;
 	
 			self.muted = true;
 			
-			try{
-				//hide the mute button
+			//hide the mute button
 				$('#mute', top.frames['controls-frame'].document).hide();
 	
 				//show the unmute button
 				$('#unmute', top.frames['controls-frame'].document).show();
-			} catch(e){}
 		},
 
 		//unmute
@@ -581,6 +579,11 @@ var WeruPlayer, carousel, feedContent;
 
 		//when the player starts playing
 		playerSoundCloud.bind(SC.Widget.Events.PLAY, function() {
+			//mute the player
+			if(self.muted){
+				playerSoundCloud.setVolume(0);
+			}
+			
 			hidePlayButton();
 		});
 
@@ -634,6 +637,11 @@ var WeruPlayer, carousel, feedContent;
             
             //when the player plays
             playerVimeo.addEvent('play', function (data) {
+        		//mute the player
+				if(self.muted){
+					playerVimeo.api('setVolume', 0);
+				}
+            	
             	hidePlayButton();
             	
             	playerVimeo.api('getDuration', function(value, player_id) {
@@ -831,6 +839,10 @@ var WeruPlayer, carousel, feedContent;
 		//channel/playlist
 		$('#channel-select').chosen();
 		$('#channel-select').bind('change propertychange', function() {
+			try{
+				carousel.destroyShow();
+			}catch(err){}
+			
 			//clear the display
 			resetDisplay();
 			

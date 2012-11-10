@@ -32,7 +32,7 @@
 	});
 
 	//unmute
-	$('#mute').click(function() {
+	$('#unmute').click(function() {
 		top.frames['player-frame'].WeruPlayer.unmute();
 	});
 
