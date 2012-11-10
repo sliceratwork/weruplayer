@@ -547,6 +547,10 @@ var WeruPlayer, carousel, feedContent;
 					$('#load-bar', top.frames['controls-frame'].document).css({
 						'width' : (playerYouTube.getVideoLoadedFraction() * 100) + '%'
 					});
+					
+					if(playerYouTube.getVideoLoadedFraction() == 1){
+						stopWatchYTBuffer();
+					}
 				}catch(e){}
 			}, 1000);
 		}
@@ -620,6 +624,18 @@ var WeruPlayer, carousel, feedContent;
 		//when the widget is ready to accept external calls
 		playerSoundCloud.bind(SC.Widget.Events.READY, function(event) {
 			checkReady(++ready);
+		});
+		
+		//while the sound is loading
+		playerSoundCloud.bind(SC.Widget.Events.LOAD_PROGRESS, function(data){
+			if(data[0].loadedProgress < 1){
+				try{
+					//update load bar
+					$('#load-bar', top.frames['controls-frame'].document).css({
+						'width' : (data[0].loadedProgress * 100) + '%'
+					});
+				}catch(e){}	
+			}
 		});
 
 		//when the player starts playing
