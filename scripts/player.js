@@ -482,8 +482,7 @@ var WeruPlayer, carousel, feedContent;
 		};
 
 		function onPlayerReady() {
-			players.data('ready', ++ready);
-			alert('youtube ready');
+			checkReady(++ready);
 		}
 
 		function onPlayerStateChange(event) {
@@ -542,8 +541,7 @@ var WeruPlayer, carousel, feedContent;
 			'wmode' : "opaque",
 			'preload' : "auto",
 			'ready' : function(event) {
-				players.data('ready', ++ready);
-				alert('audio ready');s
+				checkReady(++ready);
 			},
 			'play' : function() {
 				settings.onPlay();
@@ -588,8 +586,7 @@ var WeruPlayer, carousel, feedContent;
 		//add event listeners
 		//when the widget is ready to accept external calls
 		playerSoundCloud.bind(SC.Widget.Events.READY, function(event) {
-			players.data('ready', ++ready);
-			alert('sc ready');
+			checkReady(++ready);
 		});
 
 		//when the player starts playing
@@ -632,8 +629,7 @@ var WeruPlayer, carousel, feedContent;
 		//add event listeners
 		//ready
 		playerVimeo.addEvent('ready', function(data) {
-			players.data('ready', ++ready);
-			alert('vimeo ready');
+			checkReady(++ready);
 			
 			//update the current time
 			playerVimeo.addEvent('playProgress', function (data) {
@@ -869,8 +865,8 @@ var WeruPlayer, carousel, feedContent;
 		});
 
 		//when the player is ready
-		self.bind('changeData', function() {
-			if (self.data('ready') == 4) {
+		function checkReady(ready){
+			if(ready == 4){
 				//hide the controls overlay
 				try{
 					$('#controls-overlay', top.frames['controls-frame'].document).hide();
@@ -883,7 +879,7 @@ var WeruPlayer, carousel, feedContent;
 
 				settings.onReady();
 			}
-		});
+		}
 
 		return this;
 	};
