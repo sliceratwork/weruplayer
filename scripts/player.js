@@ -477,6 +477,16 @@ var WeruPlayer, carousel, feedContent;
 			//when it starts playing
 			if (event.data == 1) {
 				startWatchYT();
+				
+				//stop other players
+				//soundcloud
+				playerSoundCloud.pause();
+				
+				//vimeo
+				playerVimeo.api('unload');
+				
+				//audio
+				playerAudio.jPlayer('stop');
 
 				try{
 					//update the total time
@@ -532,6 +542,16 @@ var WeruPlayer, carousel, feedContent;
 				checkReady(++ready);
 			},
 			'play' : function() {
+				//stop other players
+				//soundcloud
+				playerSoundCloud.pause();
+				
+				//vimeo
+				playerVimeo.api('unload');
+					
+				//youtube
+				playerYouTube.stopVideo();
+				
 				settings.onPlay();
 			},
 			'pause' : function() {
@@ -583,6 +603,16 @@ var WeruPlayer, carousel, feedContent;
 			if(self.muted){
 				playerSoundCloud.setVolume(0);
 			}
+			
+			//stop other players
+			//vimeo
+			playerVimeo.api('unload');
+				
+			//youtube
+			playerYouTube.stopVideo();
+			
+			//audio
+			playerAudio.jPlayer('stop');
 			
 			hidePlayButton();
 		});
@@ -641,6 +671,16 @@ var WeruPlayer, carousel, feedContent;
 				if(self.muted){
 					playerVimeo.api('setVolume', 0);
 				}
+				
+				//stop other players
+				//soundcloud
+				playerSoundCloud.pause();
+					
+				//youtube
+				playerYouTube.stopVideo();
+				
+				//audio
+				playerAudio.jPlayer('stop');
             	
             	hidePlayButton();
             	
