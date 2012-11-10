@@ -298,11 +298,11 @@ var WeruPlayer, carousel, feedContent;
 		
 		//set media
 		self.setMedia = function(playIndex, callback) {
-			//stop the player
-			self.stop();
-			
 			//clear youtube interval
 			stopWatchYT();
+			
+			//stop the player
+			self.stop();
 			
 			var media = playlist[playIndex];
 			player = media.type;
@@ -425,11 +425,6 @@ var WeruPlayer, carousel, feedContent;
 						}
 					}
 					
-					playerVimeo.api('getDuration', function(value, player_id) {
-						//update the player time
-						$('#duration', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(value));
-					});
-					
 					break;
 			}
 			
@@ -511,6 +506,8 @@ var WeruPlayer, carousel, feedContent;
 			if (event.data == 0) {
 				stopWatchYT();
 				showPlayButton();
+				
+				self.next();
 			}
 		}
 
@@ -553,6 +550,8 @@ var WeruPlayer, carousel, feedContent;
 				settings.onPause();
 			},
 			'ended' : function() {
+				self.next();
+				
 				settings.onStop();
 			},
 			'timeupdate' : function(event) {
@@ -602,6 +601,9 @@ var WeruPlayer, carousel, feedContent;
 
 		//when the player has finished playing
 		playerSoundCloud.bind(SC.Widget.Events.FINISH, function() {
+			showPlayButton();
+			
+			self.next();
 		});
 
 		//while playing
@@ -626,7 +628,7 @@ var WeruPlayer, carousel, feedContent;
 
 		//add event listeners
 		//ready
-		playerVimeo.addEvent('ready', function(data) {			
+		playerVimeo.addEvent('ready', function(data) {		
 			//update the current time
 			playerVimeo.addEvent('playProgress', function (data) {
                 //update the current time
@@ -637,6 +639,21 @@ var WeruPlayer, carousel, feedContent;
 					'width' : (data.percent * 100) + '%'
 				});
             });
+            
+            //when the player plays
+            playerVimeo.addEvent('play', function (data) {
+            	playerVimeo.api('getDuration', function(value, player_id) {
+					//update the player time
+					$('#duration', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(parseInt(value)));
+				});
+            });
+            
+            //when the player ends
+            playerVimeo.addEvent('finish', function() {
+            	showPlayButton();
+            	
+            	self.next();
+			});
 		});
 
 		//toggle play/pause buttons
