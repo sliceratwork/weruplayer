@@ -416,6 +416,11 @@ var WeruPlayer, carousel, feedContent;
 					break;
 			}
 			
+			//make the active tile the second one
+			if(playIndex > 1){
+				carousel.goToSlide(playIndex - 1);
+			}
+			
 			if(typeof callback == 'function'){
 				callback();
 			}
@@ -453,7 +458,7 @@ var WeruPlayer, carousel, feedContent;
 		var playlist = [], players = $('#weru-players'), reposInt = null, ready = 0, hidden = true, currentChannel = -1,
 
 		//players
-		player, playerAudio, frameVimeo, playerVimeo, frameSoundCloud, playerSoundCloud, playerYouTube, currentYouTube, currentVimeo, currentSC, currentAudio, widgetURL = 'http://api.soundcloud.com/users/1539950/favorites', currentItem = -1, watchYT = null;
+		player, playerAudio, frameVimeo, playerVimeo, frameSoundCloud, playerSoundCloud, playerYouTube, currentYouTube, currentVimeo, currentSC, currentAudio, widgetURL = 'http://api.soundcloud.com/users/1539950/favorites', currentItem = -1, watchYT = null, watchYTBuffer = null;
 
 		//#########################################
 		//youtube
@@ -477,6 +482,8 @@ var WeruPlayer, carousel, feedContent;
 			//when it starts playing
 			if (event.data == 1) {
 				startWatchYT();
+				
+				startWatchYTBuffer();
 				
 				//stop other players
 				//soundcloud
@@ -503,6 +510,7 @@ var WeruPlayer, carousel, feedContent;
 			//when it ends
 			if (event.data == 0) {
 				stopWatchYT();
+				stopWatchYTBuffer();
 				showPlayButton();
 				
 				self.next();
@@ -528,6 +536,23 @@ var WeruPlayer, carousel, feedContent;
 
 		function stopWatchYT() {
 			clearInterval(watchYT);
+		}
+
+		function startWatchYTBuffer() {
+			stopWatchYTBuffer();
+
+			watchYTBuffer = setInterval(function() {
+				try{
+					//update load bar
+					$('#load-bar', top.frames['controls-frame'].document).css({
+						'width' : (playerYouTube.getVideoLoadedFraction() * 100) + '%'
+					});
+				}catch(e){}
+			}, 1000);
+		}
+		
+		function stopWatchYTBuffer() {
+			clearInterval(watchYTBuffer);
 		}
 
 		//#########################################

@@ -61,7 +61,7 @@
 					<div id="track-title-inner">Welcome to Weruchannels</div>
 				</div>
 				<div id="progress-bar">
-					<div id="load-bar"></div>
+					<div id="load-bar" title="Percent of track loaded so far"></div>
 					<div id="play-bar"></div>
 				</div>
 				<div id="current-time">00:00</div>
