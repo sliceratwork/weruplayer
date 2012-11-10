@@ -49,7 +49,7 @@ var WeruPlayer, carousel, feedContent;
 				case 'soundcloud':
 					setTimeout(function() {
 						playerSoundCloud.play();
-					}, 700);
+					}, 1000);
 					break;
 
 				//vimeo
@@ -105,27 +105,17 @@ var WeruPlayer, carousel, feedContent;
 
 		//stop
 		self.stop = function() {
-			switch(player) {
-				//soundcloud
-				case 'soundcloud':
-					playerSoundCloud.pause();
-					break;
-
-				//vimeo
-				case 'vimeo':
-					playerVimeo.api('unload');
-					break;
-
-				//youtube
-				case 'youtube':
-					playerYouTube.stopVideo();
-					break;
-
-				//audio
-				case 'audio':
-					playerAudio.jPlayer('stop');
-					break;
-			}
+			//soundcloud
+			playerSoundCloud.pause();
+			
+			//vimeo
+			playerVimeo.api('unload');
+				
+			//youtube
+			playerYouTube.stopVideo();
+			
+			//audio
+			playerAudio.jPlayer('stop');
 		},
 
 		//play previous
@@ -315,7 +305,7 @@ var WeruPlayer, carousel, feedContent;
 			
 			//toggle players
 			$('.player').addClass('player-hidden');
-			$('#' + player + '-player').removeClass('player-hidden');
+			$('#' + player + '-wrap').removeClass('player-hidden');
 
 			//open the player
 			if (!hidden) {
@@ -538,7 +528,7 @@ var WeruPlayer, carousel, feedContent;
 			'cssSelectorAncestor' : '#ap-content',
 			'swfPath' : "/swf",
 			'supplied' : "mp3",
-			'wmode' : "opaque",
+			'wmode' : "transparent",
 			'preload' : "auto",
 			'ready' : function(event) {
 				checkReady(++ready);
@@ -644,6 +634,8 @@ var WeruPlayer, carousel, feedContent;
             
             //when the player plays
             playerVimeo.addEvent('play', function (data) {
+            	hidePlayButton();
+            	
             	playerVimeo.api('getDuration', function(value, player_id) {
 					//update the player time
 					$('#duration', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(parseInt(value)));
@@ -738,7 +730,7 @@ var WeruPlayer, carousel, feedContent;
 				$('#playlist li').css('padding-right', 20).filter('.on').stop().animate({
 					'padding-right' : 485
 				});
-				players.css('height', 270).stop().animate({
+				players.css('height', 275).stop().animate({
 					'width' : 445
 				});
 			} else {
@@ -746,7 +738,7 @@ var WeruPlayer, carousel, feedContent;
 					'padding-right' : 485
 				});
 				players.css({
-					'height' : 270,
+					'height' : 275,
 					'width' : 445
 				});
 			}
@@ -765,7 +757,7 @@ var WeruPlayer, carousel, feedContent;
 				players.stop().animate({
 					'width' : 0
 				}, function() {
-					players.css('height', 270);
+					players.css('height', 275);
 				});
 			} else {
 				$('#playlist li').css({

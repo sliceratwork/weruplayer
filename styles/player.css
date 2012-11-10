@@ -72,17 +72,24 @@ body {
         position: absolute;
         z-index: 10;
         top: 0;
-        left: 0;
+        left: 200px;
     }
     
     .player-hidden {
         width: 1px;
         height: 1px;
         overflow: hidden;
-        visibility: hidden;
-        zoom: 1;
         position: absolute;
+        top: 0;
+        left: 0;
+        zoom: 1;
     }
+    
+     #weru-players iframe {
+         display: block;
+         width: 445px;
+         height: 274px;
+     }
     
     /* tiles */
     .tile {
