@@ -40,7 +40,8 @@
                 {
                     "title": "Hello Zepp",
                     "type": "youtube",
-                    "id": "Dk_L9wpwKCw"
+                    "id": "Dk_L9wpwKCw",
+                    "artist": "Charlie Clouser"
                 },
                 {
                     "type": "vimeo",
