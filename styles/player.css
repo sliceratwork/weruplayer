@@ -235,7 +235,17 @@ body {
     }
     
     .tile-title-2 {
+        font-weight: bold;
+        font-size: 10px;
         color: #8f8f8f;
+    }
+    
+    .on .tile-title-2 {
+        color: #B0AFAF;
+    }
+    
+    .tile-title-2 a {
+        font-size: 12px;
     }
     
     .on .tile-title-2 a {
@@ -245,6 +255,10 @@ body {
     .tile-title-3 {
         font-size: 80%;
         color: #8f8f8f;
+    }
+    
+    .on .tile-title-3 {
+        color: #B0AFAF;
     }
     
     .tile-title-4 {
