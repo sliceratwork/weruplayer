@@ -543,10 +543,13 @@ var WeruPlayer, carousel, feedContent;
 
 			watchYTBuffer = setInterval(function() {
 				try{
-					//update load bar
-					$('#load-bar', top.frames['controls-frame'].document).css({
-						'width' : (playerYouTube.getVideoLoadedFraction() * 100) + '%'
-					});
+					//check to see if we are on the right player
+					if(player == 'youtube'){
+						//update load bar
+						$('#load-bar', top.frames['controls-frame'].document).css({
+							'width' : (playerYouTube.getVideoLoadedFraction() * 100) + '%'
+						});
+					}
 					
 					if(playerYouTube.getVideoLoadedFraction() == 1){
 						stopWatchYTBuffer();
@@ -629,10 +632,13 @@ var WeruPlayer, carousel, feedContent;
 		//while the sound is loading
 		playerSoundCloud.bind(SC.Widget.Events.LOAD_PROGRESS, function(data){
 			try{
-				//update load bar
-				$('#load-bar', top.frames['controls-frame'].document).css({
-					'width' : (data[0].loadedProgress * 100) + '%'
-				});
+				//check to see if we are on the right player
+				if(player == 'soundcloud'){
+					//update load bar
+					$('#load-bar', top.frames['controls-frame'].document).css({
+						'width' : (data[0].loadedProgress * 100) + '%'
+					});
+				}
 			}catch(e){}
 		});
 
@@ -694,28 +700,31 @@ var WeruPlayer, carousel, feedContent;
 			checkReady(++ready);
 			
 			 playerVimeo.addEvent('loadProgress', function(data) {
-			 	if(data.percent < 1){
-			 		//update the load bar width
-	                $('#load-bar', top.frames['controls-frame'].document).css({
-						'width' : (data.percent * 100) + '%'
-					});
-			 	}
-				
-				//update the total video duration
-				$('#duration', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(parseInt(data.duration)));
+			 	try{
+			 		//check to see if we are on the right player
+			 		if(player == 'vimeo') {
+			 			//update the load bar width
+		                $('#load-bar', top.frames['controls-frame'].document).css({
+							'width' : (data.percent * 100) + '%'
+						});
+						
+						//update the total video duration
+						$('#duration', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(parseInt(data.duration)));
+			 		}
+			 	} catch(e){}
             });
 			
 			//update the current time
 			playerVimeo.addEvent('playProgress', function (data) {
-                //update the current time
-                $('#current-time', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(parseInt(data.seconds)));
-                
-                //update the play bar width
-                if(data.percent < 1){
+                try{
+                	//update the current time
+	                $('#current-time', top.frames['controls-frame'].document).text(jQuery.jPlayer.convertTime(parseInt(data.seconds)));
+	                
+	                //update the play bar width
 	                $('#play-bar', top.frames['controls-frame'].document).css({
 						'width' : (data.percent * 100) + '%'
 					});
-                }
+                } catch(e){}
             });
             
             //when the player plays
