@@ -236,6 +236,12 @@ var WeruPlayer, carousel, feedContent;
 				'localCache' : true,
 				'dataType' : 'json',
 				'beforeSend' : function() {
+					//hide the controls overlay
+					try{
+						$('#controls-overlay', top.frames['controls-frame'].document).show();
+						$('#playlist-overlay', top.frames['player-frame'].document).show();
+					} catch(e){}
+					
 					resetDisplay();
 				},
 				'success' : function(response) {
@@ -270,6 +276,12 @@ var WeruPlayer, carousel, feedContent;
 						
 						//create new carousel
 						createCarousel();
+						
+						//hide the controls overlay
+						try{
+							$('#controls-overlay', top.frames['controls-frame'].document).hide();
+							$('#playlist-overlay', top.frames['player-frame'].document).hide();
+						} catch(e){}
 						
 						if(typeof callback == 'function'){
 							callback();
@@ -973,11 +985,6 @@ var WeruPlayer, carousel, feedContent;
 		//when the player is ready
 		function checkReady(ready){
 			if(ready == 4){
-				//hide the controls overlay
-				try{
-					$('#controls-overlay', top.frames['controls-frame'].document).hide();
-				} catch(e){}
-				
 				//we first load the playlist
 				self.getMedia(feed, function(){
 					self.setMedia(0);

@@ -88,6 +88,7 @@
 				<div id="player-overlay"></div>
 			</div>
 			<!--/players-->
+			<div id="playlist-overlay"></div>
 		</div>
 		<!--/playlist wrap-->
 		
