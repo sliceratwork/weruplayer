@@ -309,6 +309,11 @@ var WeruPlayer, carousel, feedContent;
 			if (!hidden) {
 				openPlayer();
 			}
+			
+			//have fun with the page title
+			try{
+				top.document.title = 'Weru Channels - Now playing "' + media.title + '" by ' + media.artist + ' on "' + feedContent.items[currentChannel].title +'" from "' + feedContent.title + '"';
+			} catch(e){}
 
 			switch(player) {
 				//youtube
