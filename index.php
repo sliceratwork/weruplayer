@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 	<!-- saved from url=(0014)about:internet -->
-	<!--[if lt IE 7]> <html itemscope itemtype="http://schema.org/Blog" xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml" xml:lang="en-US" lang="en-US" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-	<!--[if IE 7 ]>    <html itemscope itemtype="http://schema.org/Blog" xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml" xml:lang="en-US" lang="en-US" class="no-js lt-ie9 lt-ie8"> <![endif]-->
-	<!--[if IE 8 ]>    <html itemscope itemtype="http://schema.org/Blog" xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml" xml:lang="en-US" lang="en-US" class="no-js lt-ie9"> <![endif]-->
-	<!--[if gt IE 8]><!--> <html itemscope itemtype="http://schema.org/Blog" xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml" xml:lang="en-US" lang="en-US" >	<!--<![endif]-->
+	<!--[if lt IE 7]> <html xml:lang="en-US" lang="en-US" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+	<!--[if IE 7 ]>    <html xml:lang="en-US" lang="en-US" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+	<!--[if IE 8 ]>    <html xml:lang="en-US" lang="en-US" class="no-js lt-ie9"> <![endif]-->
+	<!--[if gt IE 8]><!--> <html xml:lang="en-US" lang="en-US" > <!--<![endif]-->
 	
 	<head>
 		<!--Meta Tags-->
@@ -17,15 +17,25 @@
 		<meta name="msapplication-tooltip" content="Create amazing music channels for you and your friends." />
 		<meta http-equiv="Page-Enter" content="blendTrans(duration=0)" />
 		<meta http-equiv="Page-Exit" content="blendTrans(duration=0)" />
-		<meta name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE" />
 		
 		<!--Mobile-->
 		<meta name="viewport" content="width=device-width" />
+		
+		<!--Schema.org microdata-->
+		<meta itemprop="name" content="Weru Channels Player">
+		
+		<!--Styles-->
+		<link rel="stylesheet" type="text/css" href="styles/player.css" />
+		<link rel="stylesheet" type="text/css" href="styles/jquery.qtip.min.css" />
+		
+		<!--Scripts-->
+		<script type="text/javascript" src="scripts/modernizr.js" charset="utf-8"></script>
+		
 		<!--Title-->
 		<title>Weru Channels Player - Create amazing music channels for you and your friends.</title>
 	</head>
 	<body>
-		<iframe id="controls-frame" name="controls-frame" width="662" height="78" scrolling="no" allowtransparency="yes" frameborder="0" src="controls.php"></iframe>
-		<iframe id="player-frame" name="player-frame" width="1000" height="325" scrolling="no" allowtransparency="yes" frameborder="0" src="player.php"></iframe>
+		<iframe src="controls.php" id="controls-frame" name="controls-frame" width="662" height="78" scrolling="no" frameborder="0" allowtransparency="yes"></iframe>
+		<iframe src="player.php" id="player-frame" name="player-frame" class="loading" width="1000" height="325" scrolling="no" frameborder="0" allowtransparency="yes"></iframe>
 	</body>
 </html>

@@ -38,6 +38,16 @@
 
 	//toggle playlist
 	$('#toggle-playlist').click(function() {
-		$('#player-frame', top.document).slideToggle();
+		if($('#player-frame', top.document).height() > 0){
+			$(this).removeClass('on');
+			$('#player-frame', top.document).stop().animate({
+				'height': 0
+			});
+		} else {
+			$(this).addClass('on');
+			$('#player-frame', top.document).stop().animate({
+				'height': '325px'
+			});
+		}
 	});
 })(jQuery); 

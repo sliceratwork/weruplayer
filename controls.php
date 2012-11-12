@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 	<!-- saved from url=(0014)about:internet -->
-	<!--[if lt IE 7]> <html itemscope itemtype="http://schema.org/Blog" xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml" xml:lang="en-US" lang="en-US" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-	<!--[if IE 7 ]>    <html itemscope itemtype="http://schema.org/Blog" xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml" xml:lang="en-US" lang="en-US" class="no-js lt-ie9 lt-ie8"> <![endif]-->
-	<!--[if IE 8 ]>    <html itemscope itemtype="http://schema.org/Blog" xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml" xml:lang="en-US" lang="en-US" class="no-js lt-ie9"> <![endif]-->
-	<!--[if gt IE 8]><!--> <html itemscope itemtype="http://schema.org/Blog" xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml" xml:lang="en-US" lang="en-US" >	<!--<![endif]-->
+	<!--[if lt IE 7]> <html xml:lang="en-US" lang="en-US" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+	<!--[if IE 7 ]>    <html xml:lang="en-US" lang="en-US" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+	<!--[if IE 8 ]>    <html xml:lang="en-US" lang="en-US" class="no-js lt-ie9"> <![endif]-->
+	<!--[if gt IE 8]><!--> <html xml:lang="en-US" lang="en-US" > <!--<![endif]-->
 	
 	<head>
 		<!--Meta Tags-->
@@ -14,28 +14,21 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta http-equiv="imagetoolbar" content="no" />
 		<meta name="application-name" content="Weru Channels Player" />
-		<meta name="msapplication-tooltip" content="Create amazing music channels for you and your friends." />
+		<meta name="msapplication-tooltip" content="Create amazing music channels for you and your friends" />
 		<meta http-equiv="Page-Enter" content="blendTrans(duration=0)" />
 		<meta http-equiv="Page-Exit" content="blendTrans(duration=0)" />
-		<meta name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE" />
 		
 		<!--Mobile-->
 		<meta name="viewport" content="width=device-width" />
 		
 		<!--Schema.org microdata-->
 		<meta itemprop="name" content="Weru Channels Player">
-		<meta itemprop="image" content="" />
 		
 		<!--Styles-->
 		<link rel="stylesheet" type="text/css" href="styles/player-controls.css" />
 		
 		<!--Scripts-->
 		<script type="text/javascript" src="scripts/modernizr.js" charset="utf-8"></script>
-		
-		<!--Favicons-->
-		<link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico" />
-		<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
-		<link rel="apple-touch-icon" href="apple-touch-icon.png" />
 		
 		<!--Title-->
 		<title>Weru Channels Player - Create amazing music channels for you and your friends.</title>
